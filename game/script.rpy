@@ -1,27 +1,27 @@
-﻿# Define the player character's name (you can ask the player for this if you want)
-default pc_name = "Player"  # You can change this default name or prompt the player for input later
-
-# Define the characters with their respective colors
-define allen = Character("Allen", color="#ACE1FF")
+﻿# Define the characters with their respective colors
 define alice = Character("Alice Liddell", color="#FF69B4")
 define bob = Character("Bob Smith", color="#ADD8E6")
 
 init python:
-    # Import the necessary classes
-    from character import Character, CombatManager, PartyManager
+    # Import necessary classes
+    from character import Character
+    from combat import CombatManager
+    from party import PartyManager
+    from equipment import Equipment
 
-    # Create the player character (pc_char) and other characters
-    pc_char = Character("Player", "Hero", nickname="Hero")
-    alice_char = Character("Alice Liddell", "Hero")
-    bob_char = Character("Bob Smith", "Enemy")
+    # Create characters manually with the Character class
+    alice_char = Character("Alice Liddell", equipment=Equipment(weapon="Staff", armor="Robe"))
+    bob_char = Character("Bob Smith", nickname="Enemy", equipment=Equipment(weapon="Axe", armor="Chainmail"))
 
-    # Create PartyManager instance
+    # Create the player character with combat equipment
+    player_equipment = Equipment(weapon="Sword", armor="Leather Armor")
+    pc_char = Character(fullname="Player", equipment=player_equipment)
+
+    # Create PartyManager instance and add characters to their respective parties
     party_manager = PartyManager()
-
-    # Add characters to their respective parties
-    party_manager.add_to_player_party(pc_char)  # Add player character to player party
-    party_manager.add_to_player_party(alice_char)  # Add Alice to player party
-    party_manager.add_to_enemy_party(bob_char)  # Add Bob to enemy party
+    party_manager.add_to_player_party(pc_char)
+    party_manager.add_to_player_party(alice)
+    party_manager.add_to_enemy_party(bob)
 
     # Create the CombatManager with the party manager instance
     combat_manager = CombatManager(party_manager)
@@ -43,14 +43,14 @@ label start:
     alice "Hello, Hero! It's been a while, hasn't it? Or... should I call you [pc_name]?"
 
     # Show PC's equipment
-    "I’m armed with [pc_char.combat_equipment.weapon] and equipped with [pc_char.combat_equipment.armor]!"
+    "I’m armed with [pc_char.equipment.weapon] and equipped with [pc_char.equipment.armor]!"
 
     "Alice smiles at you, but Bob is standing off to the side, ready for a fight."
 
     show bob normal at left
 
     bob "Don't forget about me! I'm still stronger than anyone, no matter what they say."
-    bob "After all, I've got this [bob_char.combat_equipment.weapon]. It's not just for show, you know!"
+    bob "After all, I've got this [bob_char.equipment.weapon]. It's not just for show, you know!"
 
     "The battle is about to begin!"
 
@@ -58,71 +58,20 @@ label start:
     jump combat_loop  # Jump into the combat loop
 
 label combat_loop:
+    # A simple start for the combat loop.
+    $ results = combat_manager.start_combat()
 
-    # Show current HP of both the player and Bob
-    $ player_hp = pc_char.stats.current_hp
-    $ enemy_hp = bob_char.stats.current_hp
+    # Display the results of the combat round
+    python:
+        for result in results:
+            renpy.pause(0.5)
+            renpy.say("Result: %s" % result)
 
-    "Your current HP: [player_hp]"
-    "Bob's current HP: [enemy_hp]"
+    # Once combat ends, show a message
+    if "The enemy party has been defeated!" in results:
+        "You won the battle!"
 
-    # Alice provides encouragement or comments on the battle
-    alice "Come on, [pc_name]! You can do this!"
-    alice "Just keep your guard up, and you'll beat him!"
-
-    # Loop through the player's party and let each character take their turn
-    $ player_characters = party_manager.player_party
-    $ index = 0  # Start with the first character in the party
-
-    while index < len(player_characters):
-        $ character = player_characters[index]
-
-        # Player's turn: Choose Attack, Arte, or Defend
-        menu:
-            "Attack":
-                $ result = combat_manager.player_turn("attack", character)
-                "You attack with [character.names]! [result]"
-
-            "Arte":
-                $ result = combat_manager.player_turn("arte", character)
-                "You use Arte with [character.names]! [result]"
-
-            "Defend":
-                $ result = combat_manager.player_turn("defend", character)
-                "You defend with [character.names]! [result]"
-
-        # Check if combat is over after player's turn
-        $ combat_status = combat_manager.is_combat_over()
-        if combat_status:
-            "The battle is over! [combat_status]"
-            jump combat_end  # Jump to the end of the combat when it's over
-        else:
-            "The battle continues..."
-
-        # Move to the next character in the party
-        $ index += 1
-
-    # After all characters in the player party have taken their turns, it's the enemy's turn
-    $ result = combat_manager.enemy_turn()
-    "Bob attacks! [result]"
-
-    # Alice comments on the outcome of the enemy's attack
-    alice "Watch out, [pc_name]! That was a close one!"
-
-    # Check if combat is over after enemy's turn
-    $ combat_status = combat_manager.is_combat_over()
-    if combat_status:
-        "The battle is over! [combat_status]"
-        jump combat_end  # Jump to the end of the combat when it's over
-    else:
-        "The battle continues..."
-
-    # Return to the start of the combat loop
-    jump combat_loop
-
-label combat_end:
-    # Ending the scene after the combat ends
-    "With Bob defeated, Alice nods approvingly at your victory."
-    "You’ve survived the battle. What’s next on your adventure?"
+    elif "The player party has been defeated!" in results:
+        "You lost the battle!"
 
     return

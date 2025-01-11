@@ -1,0 +1,127 @@
+## MC
+- can be named
+- has overall alignment scale - ranges from heinous to saintly :D
+- stats
+***
+## LIs
+- 4 LIs, each has:
+	- Shorthand/ name - character
+	- Full name
+	- Nickname (assigned by MC)
+	- status
+	- (relationship)
+	- likability points/ lp
+		- affected by likes
+		- personality/choices to LI/relatives/enemies
+	- characters they are close to
+	- enemies/rivals
+### Code
+#### Data
+- fullname
+- name dictionary (possible name variations)
+- relatives (name)
+- friends (name)
+- enemies (name)
+- starting stats
+#### Functions
+- shorthand (current name)
+- nickname (mc choice)
+- relationship (to MC)
+- stats
+- route, routelock, ending
+- lp
+- liked chars
+	- if lp++ on liked char; this.lp ++
+- disliked chars
+	- lp++ --> this.lp -- (lol)
+***
+## Events
+- available on different occasions
+### Mood Modal
+- up to 8 choices - 4 agreement/disagreement
+	- energetic, calm, mean, friendly
+- 4 choices at most!
+- modal to answer smaller events quickly
+	- the reactions of the characters aren't too versatile
+	- mostly react to agree/disagree
+	- lp changes
+### Choices
+- typical VN choice picker, like 2 to 3 choices
+- usually only once per event
+#### Route break
+- certain events have a "router breaker" --> choice is inappropriate for the route --> route ends
+- after route break --> some events later choice to come back to og route (makes you unable to achieve true endings)
+***
+## Quests
+### Story Quests (SQ)
+- follow the story lol
+- failing them can lead to game over or early endings
+### Personal Quests (PQ)
+- additional to SQs, only add a bit of gameplay to the story
+- fulfilling the quests makes you more villainous
+	- failing/abandoning the quests is necessary for the "good" alignment
+- complete these to date the og villainess :D
+### Character Quests (CQ)
+- for the LIs and characters
+- can unlock more routes and endings this way
+***
+## Routes
+- Routes are choice related!
+### MC routes
+- depend on the PQs
+	- abandon (LI possible, no OG villainess)
+		- chose to break out of the cycle - be a good person
+	- continue/villainess ending (LI possible)
+		- become the villainess (sort of superficial)
+		- (befriend og villain)
+	- true villain ending (true OG villainess ending possible)
+		- become the villainess and take revenge with the OG
+### Character routes
+- conclusions (LIs):
+	- 3 personal routes for each - bad, good, true
+		- can overlap with love endings
+	- bad:
+		- end up staying the way they are
+		- fail personal quest
+			- can trigger early endings
+	- good:
+		- end up with a good outcome (finished character quest)
+	- true:
+		- special form of good ending (continue charcter quest)
+- other characters can have routes too (only 2; fail or success)
+## Endings
+- fail the story quests = early ending/ game over
+- Endings are for the LIs
+- depend on character growth, choices, stats and lp
+- love endings:
+	- abandon (LI hates you; or you him/her :D)
+	- bad - end up as lovers (stuck in game, melancholic toned, OG villainess not possible)
+	- neutral - end up as friends/lovers, leave option dependent on choices?
+	- good - end up as lovers (leave game)
+	- true (ng+) - end up as lovers and capability to leave when desired
+- early endings:
+	- game over (SQ)
+		- fail the story related stuff
+	- early end for each LI (CQ)
+		- fail the quests for the character --> really really bad ending ;)
+## Hierarchy
+MC route > character route (can include side chars) > ending (only one possible)
+- early endings break the hierarchy -> no route conclusions
+
+mc: abandon, continue, true
+char: bad, good, true
+end: bad1, bad2, neutral, good, true
+- depending on route conclusions (both mc and character) some endings can't be reached
+- if both route conclusions are fitting, ending can be forced to be better (even without fulfilling requirements!)
+### LI1
+| #   | mc       | char    | end                 |
+| --- | -------- | ------- | ------------------- |
+| 1.1 | abandon  | abandon | early, bad, neutral |
+| 1.2 | abandon  | good    | neutral, good       |
+| 1.3 | abandon  | true    | good, true          |
+| 2.1 | continue | abandon | early, bad          |
+| 2.2 | continue | good    | bad, neutral        |
+| 2.3 | continue | true    | bad, neutral, good  |
+| 3.1 | true     | abandon | early               |
+| 3.2 | true     | good    | bad                 |
+| 3.3 | true     | true    | bad                 |
